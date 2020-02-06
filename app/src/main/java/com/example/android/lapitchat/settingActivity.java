@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.transition.Slide;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -53,7 +56,11 @@ public class settingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getwindowanimation();
         setContentView(R.layout.activity_setting);
+
+
+
         user= FirebaseAuth.getInstance().getCurrentUser();
         String uid=user.getUid();
         UserName=findViewById(R.id.IdName);
@@ -63,6 +70,9 @@ public class settingActivity extends AppCompatActivity {
         btnImage=findViewById(R.id.IdChangeImage);
         ref= FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
         sref= FirebaseStorage.getInstance().getReference();
+
+
+
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -104,6 +114,16 @@ public class settingActivity extends AppCompatActivity {
             }
         });
 
+    }
+    public void getwindowanimation()
+    {
+        Slide slide=new Slide(Gravity.RIGHT);
+        slide.setDuration(500);
+        Log.d("raj", "getwindowanimation: ");
+        getWindow().setEnterTransition(slide);
+        Slide slide2=new Slide(Gravity.LEFT);
+        slide2.setDuration(500);
+        getWindow().setExitTransition(slide2);
     }
 
     @Override
@@ -152,38 +172,6 @@ public class settingActivity extends AppCompatActivity {
 
                     }
                 });
-
-
-               /* final UploadTask uploadTask=storageReference.putFile(uri);
-                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        Task<Uri>urlTask=uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                            @Override
-                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                if(!task.isSuccessful())
-                                {
-                                    throw task.getException();
-                                }
-                                url=storageReference.getDownloadUrl().toString();
-                                return storageReference.getDownloadUrl();
-                            }
-                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                ref.child("image").setValue(url).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        mprogress.dismiss();
-                                        Toast.makeText(settingActivity.this, "Image uploaded", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        });
-
-                    }
-                });*/
             }
             else if(resultCode==CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE)
             {

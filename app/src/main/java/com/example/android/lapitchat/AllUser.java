@@ -1,10 +1,14 @@
 package com.example.android.lapitchat;
 
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,8 +41,10 @@ public class AllUser extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        getwindowanimation();
         setContentView(R.layout.activity_all_user);
-
+        //getwindowanimation();
 
         mtoolbar=findViewById(R.id.allUser_action_bar);
         setSupportActionBar(mtoolbar);
@@ -75,6 +81,23 @@ public class AllUser extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+    public void getwindowanimation()
+    {
+        Slide slide=new Slide(Gravity.RIGHT);
+        slide.setDuration(500);
+        Log.d("raj", "getwindowanimation: ");
+        getWindow().setEnterTransition(slide);
+        Slide slide2=new Slide(Gravity.LEFT);
+        slide2.setDuration(500);
+        getWindow().setExitTransition(slide2);
+
+    }
+
 
 
 
