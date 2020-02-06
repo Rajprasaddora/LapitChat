@@ -1,6 +1,7 @@
 package com.example.android.lapitchat;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -25,7 +31,8 @@ public class AllUser extends AppCompatActivity {
     RecyclerView recyclerView;
     DatabaseReference ref;
     FirebaseRecyclerOptions<UserInfo> option;
-    FirebaseRecyclerAdapter<UserInfo,mViewHolder> adapter;
+    ArrayList<UserInfo> all;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,63 +48,34 @@ public class AllUser extends AppCompatActivity {
 
         ref=FirebaseDatabase.getInstance().getReference().child("Users");
 
+        all = new ArrayList<>();
         recyclerView=findViewById(R.id.recycler);
-        doit();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        recyclerView.setAdapter(adapter);
-
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adapter.startListening();
-    }
-
-    public class mViewHolder extends RecyclerView.ViewHolder{
-        public TextView name;
-        public TextView status;
-        public CircleImageView image;
-        public mViewHolder(@NonNull View itemView) {
-            super(itemView);
-            name=itemView.findViewById(R.id.IdUserName);
-            status=itemView.findViewById(R.id.IdUserstatus);
-            image=itemView.findViewById(R.id.circleImageView);
-        }
-    }
-    public void doit()
-    {
-        option=new FirebaseRecyclerOptions.Builder<UserInfo>().setQuery(ref,UserInfo.class).build();
-        adapter=new FirebaseRecyclerAdapter<UserInfo, mViewHolder>(option) {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            protected void onBindViewHolder(@NonNull mViewHolder holder, int position, @NonNull UserInfo model) {
-                Picasso.get().load(model.getImage()).into(holder.image);
-                holder.name.setText(model.getName());
-                holder.status.setText(model.getStatus());
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+
+                    for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                        all.add(snap.getValue(UserInfo.class));
+                        //Log.d("raj",snap.getValue(UserInfo.class).getName()+" ");
+
+                    }
+                    recyclerView.setAdapter(new allUserAdapter(all));
+                }
             }
 
-            @NonNull
             @Override
-            public mViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View mview= LayoutInflater.from(parent.getContext()).inflate(R.layout.user_info,parent,false);
-                return new mViewHolder(mview);
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
-        };
+        });
+
+
+
     }
+
+
+
 }
