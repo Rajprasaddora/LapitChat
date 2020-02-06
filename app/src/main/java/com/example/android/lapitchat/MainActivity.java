@@ -34,8 +34,12 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth=FirebaseAuth.getInstance();
         toolbar=findViewById(R.id.action_bar);
+
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Chat app");
+
+
         mtablayout=findViewById(R.id.idTabLayout);
         mViewPager=findViewById(R.id.idTabPager);
         mSelectionPageAdapter=new SelectionPageAdapter(getSupportFragmentManager());

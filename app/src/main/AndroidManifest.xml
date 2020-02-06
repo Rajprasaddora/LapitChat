@@ -18,7 +18,8 @@
         <activity
             android:name=".StatusActivity"
             android:parentActivityName=".settingActivity" />
-        <activity android:name=".settingActivity" />
+        <activity android:name=".settingActivity"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".loginActivity"
             android:parentActivityName=".StartActivity" />

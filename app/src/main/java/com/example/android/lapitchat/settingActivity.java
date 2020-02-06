@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,6 +50,7 @@ public class settingActivity extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference ref;
     StorageReference storageReference;
+    private Toolbar toolbar;
     private StorageReference sref;
 
     private ProgressDialog mprogress;
@@ -59,7 +61,10 @@ public class settingActivity extends AppCompatActivity {
         getwindowanimation();
         setContentView(R.layout.activity_setting);
 
-
+        toolbar=findViewById(R.id.setting_action_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Profile Setting");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         user= FirebaseAuth.getInstance().getCurrentUser();
         String uid=user.getUid();
@@ -108,13 +113,17 @@ public class settingActivity extends AppCompatActivity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent,"SELECT IMAGE"),GALLERY_PICK);
 
-                /* CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(settingActivity.this);*/
             }
         });
 
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     public void getwindowanimation()
     {
         Slide slide=new Slide(Gravity.RIGHT);
