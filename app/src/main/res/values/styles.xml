@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="colorControlNormal">#FFFADE</item>
+        <item name="android:divider">#000000</item>
     </style>
 
 </resources>

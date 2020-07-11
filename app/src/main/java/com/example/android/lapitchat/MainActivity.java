@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         mtablayout=findViewById(R.id.idTabLayout);
         mViewPager=findViewById(R.id.idTabPager);
+        //mtablayout.getTabWidget().setDividerDrawable(R.color.black);
         mSelectionPageAdapter=new SelectionPageAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSelectionPageAdapter);
         mtablayout.setupWithViewPager(mViewPager);
